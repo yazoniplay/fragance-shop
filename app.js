@@ -39,12 +39,16 @@ $("#tabs")?.addEventListener("click",e=>{let b=e.target.closest("[data-cat]");if
 document.querySelectorAll("[data-mood]").forEach(b=>b.addEventListener("click",()=>{if(!$("#products")){location.href="products.html?mood="+b.dataset.mood;return}familyFilter=b.dataset.mood;cat="all";$("#search").value="";document.querySelectorAll("[data-cat]").forEach(x=>x.classList.toggle("active",x.dataset.cat==="all"));$("#finderNote").textContent=products.filter(p=>p.family.includes(familyFilter)).length+" parfymer visade";$("#shop").scrollIntoView({behavior:"smooth"});render()}));
 $("#search")?.addEventListener("input",()=>{familyFilter=null;render()});$("#sort")?.addEventListener("change",render);$("#searchBtn").addEventListener("click",()=>{if(!$("#shop")){location.href="products.html";return}$("#shop").scrollIntoView({behavior:"smooth"});$("#search").focus()});$("#cartBtn").addEventListener("click",openBag);
 $("#wishBtn").addEventListener("click",()=>{if(!$("#shop")){location.href="products.html?view=wishlist";return}cat="all";familyFilter=null;$("#search").value="";document.querySelectorAll("[data-cat]").forEach(x=>x.classList.toggle("active",x.dataset.cat==="all"));render();$("#products").innerHTML=products.filter(p=>wish.includes(p.id)).map(p=>'<article class="card"><div class="photo" data-view="'+p.id+'"><img src="'+p.img+'" alt="'+p.name+'"><button class="heart saved" data-wish="'+p.id+'">♥</button><button class="quick" data-add="'+p.id+'">LÄGG I KASSEN — '+money(p.price)+'</button></div><div class="info"><p class="brand">'+p.brand+'</p><h3 class="name">'+p.name+'</h3><b>'+money(p.price)+'</b></div></article>').join("");$("#empty").hidden=wish.length>0;$("#shop").scrollIntoView({behavior:"smooth"})});
-$("#shade").addEventListener("click",closeAll);document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",closeAll));$("#menuBtn").addEventListener("click",()=>$("#nav").classList.toggle("open"));
+$("#shade").addEventListener("click",closeAll);document.querySelectorAll("[data-close]").forEach(b=>b.addEventListener("click",closeAll));const menuBtn=$("#menuBtn"),menuNav=$("#nav"),menuShade=$("#menuShade");
+function setMenu(open){menuNav?.classList.toggle("open",open);menuShade?.classList.toggle("open",open);menuBtn?.setAttribute("aria-expanded",String(open));menuBtn?.setAttribute("aria-label",open?"Stäng meny":"Öppna meny")}
+menuBtn?.addEventListener("click",()=>setMenu(!menuNav.classList.contains("open")));
+$("#menuClose")?.addEventListener("click",()=>setMenu(false));
+menuShade?.addEventListener("click",()=>setMenu(false));
 $("#checkout").addEventListener("click",()=>toast("Kassan är inte tillgänglig ännu"));
 $("#newsletter")?.addEventListener("submit",e=>{e.preventDefault();$("#newsMessage").textContent="Tack! Du är anmäld.";e.target.reset()});
 $("#modalContent").addEventListener("click",e=>{let b=e.target.closest("[data-add]");if(b){add(+b.dataset.add);closeAll()}});
-document.querySelectorAll("#nav a").forEach(a=>a.addEventListener("click",()=>$("#nav").classList.remove("open")));
-document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAll()});if($("#products")){const params=new URLSearchParams(location.search);if(params.get("mood"))familyFilter=params.get("mood");render();if(params.get("view")==="wishlist"){$("#wishBtn").click()}}renderCart();
+document.querySelectorAll("#nav a").forEach(a=>a.addEventListener("click",()=>setMenu(false)));
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeAll();setMenu(false)}});if($("#products")){const params=new URLSearchParams(location.search);if(params.get("mood"))familyFilter=params.get("mood");render();if(params.get("view")==="wishlist"){$("#wishBtn").click()}}renderCart();
 
 (async()=>{
   try {

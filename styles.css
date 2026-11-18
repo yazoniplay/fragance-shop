@@ -364,3 +364,26 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.65;strok
 :root[data-theme="dark"] .tag,:root[data-theme="dark"] .heart{background:#28221d;color:var(--ink)}
 :root[data-theme="dark"] .photo{background:#2b241f}
 @media(max-width:700px){.theme-toggle{padding:7px 9px!important}.theme-label{display:none}.actions{gap:11px}.actions button{padding:7px 0}}
+
+/* Shopify-style slide-out navigation */
+.header{z-index:22;justify-content:flex-start}
+.header nav#nav{position:fixed;inset:0 auto 0 0;width:min(420px,92vw);height:100dvh;margin:0;padding:30px 34px 26px;background:var(--surface);border:0;border-right:1px solid var(--line);display:flex;flex-direction:column;align-items:stretch;gap:0;overflow-y:auto;z-index:24;transform:translateX(-105%);visibility:hidden;transition:transform .32s cubic-bezier(.22,.7,.25,1),visibility .32s}
+.header nav#nav.open{transform:translateX(0);visibility:visible}
+.menu-panel-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:30px;border-bottom:1px solid var(--line)}
+.menu-panel-head .eyebrow{margin:0;font-size:9px}
+.menu-panel-head button{border:0;background:none;font-size:28px;font-weight:300;line-height:1;padding:2px 5px;color:var(--ink)}
+.header nav#nav a{display:flex;align-items:center;justify-content:space-between;margin:0;padding:14px 0;font-size:14px;border-bottom:1px solid var(--line);color:var(--ink);transition:padding .2s,color .2s}
+.header nav#nav a:hover{padding-left:6px;color:var(--accent)}
+.header nav#nav a span{color:var(--muted);font-size:14px}
+.header nav#nav a.menu-primary{font-size:24px;font-weight:550;letter-spacing:-.8px;padding:27px 0}
+.header nav#nav a.menu-primary span{font-size:18px;color:var(--accent)}
+.menu-divider{height:1px;background:var(--line);margin:12px 0 20px}
+.header nav#nav .menu-label{font-size:9px;letter-spacing:1.5px;color:var(--muted);margin:0 0 4px;font-weight:650}
+.header nav#nav .menu-panel-foot{display:flex;flex-direction:column;gap:5px;margin-top:auto;padding-top:35px;color:var(--muted);font-size:10px;letter-spacing:.2px}
+#menuShade{position:fixed;inset:0;background:#171612a8;z-index:21;opacity:0;visibility:hidden;transition:opacity .28s,visibility .28s}
+#menuShade.open{opacity:1;visibility:visible}
+.menu-toggle{display:inline-flex!important;align-items:center;justify-content:center;order:-1;margin-right:24px}
+.header .logo{margin-right:auto}
+.header .actions{margin-left:24px}
+@media(max-width:700px){.header{height:68px;padding:0 5%}.header nav#nav{width:min(390px,90vw);height:100dvh;padding:25px 25px 22px}.menu-toggle{margin-right:15px}.header .actions{gap:12px;margin:0 0 0 auto}.header .actions button:first-child{display:inline-flex}}
+@media(prefers-reduced-motion:reduce){.header nav#nav,#menuShade{transition:none}}
