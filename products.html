@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://images.unsplash.com">
 <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="products-page">
 <div class="announcement"><span>FRI FRAKT ÖVER 1 200 KR</span><span>PERSONLIGT UTVALDA DOFTER</span><span>1–3 DAGARS LEVERANS</span></div>
 <header class="header">
  <a class="logo" href="#" aria-label="Solvind startsida">solvind<span>.</span></a>
@@ -17,11 +17,13 @@
  <div class="actions"><button id="searchBtn" aria-label="Sök">Sök</button><button id="wishBtn">Sparat <i id="wishCount">0</i></button><button id="cartBtn">Kasse <i id="cartCount">0</i></button></div>
  <button class="menu-toggle" id="menuBtn" aria-label="Öppna meny">Meny <span>☰</span></button>
 </header>
-<main><section class="page-intro"><p class="eyebrow">SOLVIND · VÅRT URVAL</p><h1>Hitta din <em>signaturdoft.</em></h1><p>Utvalda parfymer med karaktär. Hitta en ny favorit bland våra dofter.</p></section><section class="shop" id="shop"><div class="section-heading shop-heading"><div><p class="eyebrow">VÅRT URVAL</p><h2>Utvalda <em>favoriter.</em></h2></div><p>Parfymer vi tycker förtjänar<br>en plats i din doftgarderob.</p></div>
-<div class="shop-tools"><div class="tabs" id="tabs"><button class="active" data-cat="all">Alla dofter</button><button data-cat="women">Dam</button><button data-cat="men">Herr</button><button data-cat="unisex">Unisex</button></div><div class="filters"><label class="search-field"><span>⌕</span><input id="search" type="search" placeholder="Sök doft eller varumärke..." aria-label="Sök dofter"></label><select id="sort" aria-label="Sortera"><option value="featured">Utvalda</option><option value="low">Pris: lägst först</option><option value="high">Pris: högst först</option><option value="name">Namn: A–Ö</option></select></div></div>
+<main class="catalogue-main">
+<section class="page-intro"><div class="page-intro-inner"><p class="eyebrow">SOLVIND / PARFYM</p><h1>Hitta din nästa doft.</h1><p>En genomtänkt samling dofter värda att upptäcka.</p></div></section>
+<section class="shop catalogue" id="shop">
+<div class="catalogue-topline"><span>VÅRT SORTIMENT</span><span>UTVALT MED OMSORG</span></div>
+<div class="shop-tools"><div class="tabs" id="tabs"><button class="active" data-cat="all">Alla</button><button data-cat="women">Dam</button><button data-cat="men">Herr</button><button data-cat="unisex">Unisex</button></div><div class="filters"><label class="search-field"><span>⌕</span><input id="search" type="search" placeholder="Sök parfymer" aria-label="Sök dofter"></label><select id="sort" aria-label="Sortera"><option value="featured">Sortera: Utvalda</option><option value="low">Pris: lägst först</option><option value="high">Pris: högst först</option><option value="name">Namn: A–Ö</option></select></div></div>
 <div id="products" class="product-grid"></div><p id="empty" class="empty" hidden>Vi hittade ingen doft. Prova en annan sökning.</p>
-</section>
-<p id="finderNote" hidden></p></main><footer><a class="logo" href="#">solvind<span>.</span></a><p>Utvalda dofter. Stockholm, Sverige.</p><div><a href="products.html">Parfym</a><a href="#story">Om oss</a><a href="mailto:hej@solvind.se">Kontakt</a></div><small>© SOLVIND 2026</small></footer>
+</section><p id="finderNote" hidden></p></main><footer><a class="logo" href="#">solvind<span>.</span></a><p>Utvalda dofter. Stockholm, Sverige.</p><div><a href="products.html">Parfym</a><a href="#story">Om oss</a><a href="mailto:hej@solvind.se">Kontakt</a></div><small>© SOLVIND 2026</small></footer>
 <div id="shade"></div><aside id="drawer" aria-label="Varukorg"><div class="drawer-head"><div><p class="eyebrow">DINA VAL</p><h2>Din kasse <small id="itemCount">(0)</small></h2></div><button data-close aria-label="Stäng">×</button></div><div id="cartItems"></div><div class="drawer-bottom"><div class="total"><span>Delsumma</span><strong id="subtotal">0 kr</strong></div><p>Frakt beräknas i kassan.</p><button class="button button-dark full" id="checkout">Till kassan ↗</button><button class="plain" data-close>Fortsätt handla</button></div></aside>
 <div id="modal" class="modal" role="dialog" aria-modal="true"><button class="x" data-close aria-label="Stäng">×</button><div id="modalContent"></div></div><div id="toast" role="status"></div>
 <script src="app.js"></script>

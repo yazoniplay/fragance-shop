@@ -164,3 +164,59 @@ footer{background:#292823;color:#f8f7f3;padding:32px 7%;display:flex;align-items
 @media(max-width:700px){
   .hero-fullbleed h1{font-size:clamp(42px,9.5vw,58px);line-height:1.04}
 }
+
+
+/* Minimal fragrance catalogue */
+.products-page{background:#fff}
+.products-page .announcement{height:29px;font-size:8px;letter-spacing:1.25px}
+.products-page .header{background:#fff}
+.products-page .page-intro{background:#f7f6f2;padding:64px 7% 58px}
+.products-page .page-intro-inner{max-width:1280px;margin:0 auto}
+.products-page .page-intro .eyebrow{font-size:9px;letter-spacing:1.6px;margin-bottom:17px}
+.products-page .page-intro h1{font-size:clamp(34px,4vw,52px);font-weight:500;letter-spacing:-.045em;line-height:1.08;margin:0 0 12px;color:#24231f}
+.products-page .page-intro h1 em{font-style:normal;color:inherit}
+.products-page .page-intro-inner>p:last-child{font-size:13px;color:#77736c;line-height:1.7;margin:0}
+.products-page .catalogue{padding:36px 7% 100px;background:#fff;max-width:1600px;margin:0 auto}
+.products-page .catalogue-topline{display:flex;justify-content:space-between;padding-bottom:17px;border-bottom:1px solid #e9e7e1;color:#89857d;font-size:8px;letter-spacing:1.35px}
+.products-page .shop-tools{border:0;padding:19px 0 25px;margin:0;align-items:center}
+.products-page .tabs{gap:24px}
+.products-page .tabs button{font-size:11px;padding:8px 0;color:#858178}
+.products-page .tabs button.active{color:#24231f;font-weight:600}
+.products-page .tabs button.active:after{bottom:-9px;height:1px;background:#24231f}
+.products-page .filters{gap:24px}
+.products-page .search-field{border-bottom:1px solid #dedbd3;padding:8px 0;min-width:190px}
+.products-page .search-field span{font-size:17px}
+.products-page .search-field input{width:165px;font-size:11px}
+.products-page .filters select{font-size:10px;color:#5f5b54}
+.products-page .product-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:42px 22px}
+.products-page .photo{aspect-ratio:4/4.7;background:#f4f2ed}
+.products-page .photo img{mix-blend-mode:multiply}
+.products-page .tag{top:12px;left:12px;background:#fff;font-size:7px;letter-spacing:1px;padding:7px 9px}
+.products-page .heart{top:10px;right:10px;width:32px;height:32px;font-size:17px;box-shadow:0 1px 5px #0000000a}
+.products-page .quick{height:42px;font-size:9px;letter-spacing:.6px;background:#24231f}
+.products-page .info{padding:14px 1px 0}
+.products-page .brand{font-size:8px;letter-spacing:1.15px;margin-bottom:6px;color:#8b877f}
+.products-page .name{font-size:13px;font-weight:500;letter-spacing:-.01em;margin-bottom:10px}
+.products-page .notes{font-size:9px;color:#858178}
+.products-page .price{font-size:11px;font-weight:600}
+@media(max-width:1000px){.products-page .product-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:35px 18px}}
+@media(max-width:700px){
+.products-page .announcement{height:27px}
+.products-page .page-intro{padding:46px 6% 39px}
+.products-page .page-intro h1{font-size:36px}
+.products-page .page-intro-inner>p:last-child{font-size:12px}
+.products-page .catalogue{padding:26px 5% 70px}
+.products-page .catalogue-topline{font-size:7px;padding-bottom:13px}
+.products-page .shop-tools{padding:15px 0 22px;gap:17px}
+.products-page .tabs{gap:21px}
+.products-page .tabs button{font-size:10px}
+.products-page .filters{gap:12px}
+.products-page .search-field{min-width:0;flex:1}
+.products-page .search-field input{width:100%;min-width:0}
+.products-page .filters select{max-width:118px;font-size:9px}
+.products-page .product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 12px}
+.products-page .photo{aspect-ratio:3/3.7}
+.products-page .quick{height:36px;font-size:8px}
+.products-page .info{padding-top:11px}
+.products-page .name{font-size:12px}
+}
