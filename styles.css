@@ -454,3 +454,12 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.65;strok
  .announcement,.products-page .announcement{height:32px!important;min-height:32px!important}
  .header{top:32px!important}
 }
+
+/* Right-side menu drawer, aligned with the hamburger; keep it above its overlay */
+.header{z-index:22!important}
+.header nav#nav{position:fixed!important;left:auto!important;right:0!important;top:0!important;bottom:0!important;width:min(420px,92vw)!important;height:100dvh!important;z-index:24!important;border-right:0!important;border-left:1px solid var(--line)!important;transform:translateX(105%)!important;visibility:hidden!important;pointer-events:none!important}
+.header nav#nav.open{transform:translateX(0)!important;visibility:visible!important;pointer-events:auto!important}
+#menuShade{z-index:21!important;pointer-events:none!important}
+#menuShade.open{pointer-events:auto!important}
+.header nav#nav a,.header nav#nav button{position:relative;z-index:1;pointer-events:auto!important}
+@media(max-width:700px){.header nav#nav{right:0!important;left:auto!important;width:min(390px,90vw)!important}}
