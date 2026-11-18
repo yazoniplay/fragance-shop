@@ -1,3 +1,19 @@
+
+// SOLVIND theme preference
+(()=>{
+ const root=document.documentElement;
+ const button=document.getElementById("themeToggle");
+ const saved=localStorage.getItem("solvind-theme");
+ const preferred=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";
+ function apply(theme){
+  root.dataset.theme=theme;
+  const dark=theme==="dark";
+  if(button){button.setAttribute("aria-label",dark?"Byt till ljust läge":"Byt till mörkt läge");button.setAttribute("title",dark?"Byt till ljust läge":"Byt till mörkt läge");button.innerHTML='<span class="theme-icon" aria-hidden="true">'+(dark?"☀":"☾")+'</span><span class="theme-label">'+(dark?"Ljust läge":"Mörkt läge")+'</span>';}
+  const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=dark?"#191715":"#f3eee7";
+ }
+ apply(saved==="dark"||saved==="light"?saved:preferred);
+ button?.addEventListener("click",()=>{const next=root.dataset.theme==="dark"?"light":"dark";localStorage.setItem("solvind-theme",next);apply(next)});
+})();
 let products=[
 {id:1,brand:"MAISON MARGIELA",name:"REPLICA — Lazy Sunday Morning",price:1390,cat:"unisex",size:"100 ml",tag:"KUNDFAVORIT",notes:["Liljekonvalj","Vit mysk","Päron"],family:["fresh","floral"],desc:"Känslan av nytvättade lakan, mjukt morgonljus och en söndag utan planer. Ren mysk möter päron och vita blommor.",img:"https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=700&q=85"},
 {id:2,brand:"YVES SAINT LAURENT",name:"Libre Eau de Parfum",price:1290,cat:"women",size:"90 ml",tag:"IKONISK",notes:["Lavendel","Apelsinblomma","Vanilj"],family:["floral","warm"],desc:"En självsäker blomdoft där aromatisk lavendel möter apelsinblomma och varm vanilj.",img:"https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=700&q=85"},
