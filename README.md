@@ -1,14 +1,15 @@
-# OLFACT — Fragrance Store
+# OLFACT — Fragrance, with a point of view
 
-A responsive fragrance storefront built with vanilla HTML, CSS and JavaScript for static hosting such as GitHub Pages.
+An editorial fragrance storefront built with vanilla HTML, CSS and JavaScript for static hosting such as GitHub Pages.
 
-## Features
-- Editorial luxury-inspired responsive storefront
+## Experience
+- High-contrast art direction with campaign-led photography and editorial layouts
 - Fragrance catalogue with category filters, search and sorting
-- Product detail views with scent notes
+- Mood-led scent discovery across woody, fresh, floral and warm fragrance families
+- Product detail views with notes and descriptions
 - Shopping bag with quantity controls and local storage persistence
 - Wishlist saved in local storage
-- Newsletter form interaction
+- Responsive navigation and layouts for mobile
 
 ## Run locally
 Open `index.html` in a browser or serve this folder with any static HTTP server.
@@ -17,4 +18,4 @@ Open `index.html` in a browser or serve this folder with any static HTTP server.
 In repository Settings → Pages, choose **Deploy from a branch**, select `main` and `/(root)`, then save.
 
 ## Before accepting real orders
-The bag is currently a front-end demo. Connect a secure backend and payment provider (such as Stripe) before taking payments. Never expose secret API keys in browser code. Product images and Google Fonts are loaded remotely.
+The bag is currently a front-end demo. Connect a secure backend and payment provider before taking payments. Newsletter signup is also a front-end interaction only. Never expose secret API keys in browser code. Product listings and imagery are demo content; verify product data, image rights and availability before launch. Google Fonts and product photography load remotely.
