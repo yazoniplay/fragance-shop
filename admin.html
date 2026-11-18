@@ -56,7 +56,8 @@
       <label>Lager<input id="pStock" type="number" min="0" value="0"></label>
       <label>Kategori<select id="pCategory"><option value="unisex">Unisex</option><option value="women">Dam</option><option value="men">Herr</option></select></label>
       <label>Storlek<input id="pSize" placeholder="50 ml"></label>
-      <label class="wide">Bild-URL<input id="pImage" type="url" placeholder="https://…"></label>
+      <div class="wide image-upload-field"><label for="pImageFile">Ladda upp produktbild</label><input id="pImageFile" type="file" accept="image/jpeg,image/png,image/webp,image/avif"><small>JPG, PNG, WEBP eller AVIF · max 4 MB</small><img id="pImagePreview" alt="Förhandsvisning av produktbild" hidden></div>
+      <label class="wide">Eller använd bild-URL<input id="pImage" type="url" placeholder="https://…"></label>
       <label class="wide">Etikett<input id="pTag" placeholder="T.ex. NYHET"></label>
       <label class="wide">Doftnoter<input id="pNotes" placeholder="Sandelträ, Kardemumma, Läder"></label>
       <label class="wide">Doftfamiljer<input id="pFamily" placeholder="woody, warm, fresh"></label>
