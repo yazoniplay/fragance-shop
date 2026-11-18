@@ -445,3 +445,12 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.65;strok
 .header{z-index:8!important}
 #shade{z-index:30!important}
 #drawer{z-index:31!important}
+
+/* Keep the announcement strip and header stacked when scrolling */
+.announcement{position:sticky!important;top:0!important;z-index:9!important}
+.header{position:sticky!important;top:32px!important;z-index:8!important}
+.products-page .announcement{height:32px!important;min-height:32px!important}
+@media(max-width:700px){
+ .announcement,.products-page .announcement{height:32px!important;min-height:32px!important}
+ .header{top:32px!important}
+}
