@@ -1,4 +1,4 @@
-const products=[
+let products=[
 {id:1,brand:"MAISON MARGIELA",name:"REPLICA — Lazy Sunday Morning",price:1390,cat:"unisex",size:"100 ml",tag:"KUNDFAVORIT",notes:["Liljekonvalj","Vit mysk","Päron"],family:["fresh","floral"],desc:"Känslan av nytvättade lakan, mjukt morgonljus och en söndag utan planer. Ren mysk möter päron och vita blommor.",img:"https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=700&q=85"},
 {id:2,brand:"YVES SAINT LAURENT",name:"Libre Eau de Parfum",price:1290,cat:"women",size:"90 ml",tag:"IKONISK",notes:["Lavendel","Apelsinblomma","Vanilj"],family:["floral","warm"],desc:"En självsäker blomdoft där aromatisk lavendel möter apelsinblomma och varm vanilj.",img:"https://images.unsplash.com/photo-1541643600914-78b084683601?auto=format&fit=crop&w=700&q=85"},
 {id:3,brand:"LE LABO",name:"Santal 33",price:2490,cat:"unisex",size:"50 ml",tag:"DOFTFAVORIT",notes:["Sandelträ","Kardemumma","Läder"],family:["woody","warm"],desc:"Rökiga träslag, kryddor och läder i en varm komposition med tydlig karaktär. Svår att glömma.",img:"https://images.unsplash.com/photo-1592945403244-b3fbafd7f539?auto=format&fit=crop&w=700&q=85"},
@@ -29,3 +29,18 @@ $("#newsletter")?.addEventListener("submit",e=>{e.preventDefault();$("#newsMessa
 $("#modalContent").addEventListener("click",e=>{let b=e.target.closest("[data-add]");if(b){add(+b.dataset.add);closeAll()}});
 document.querySelectorAll("#nav a").forEach(a=>a.addEventListener("click",()=>$("#nav").classList.remove("open")));
 document.addEventListener("keydown",e=>{if(e.key==="Escape")closeAll()});if($("#products")){const params=new URLSearchParams(location.search);if(params.get("mood"))familyFilter=params.get("mood");render();if(params.get("view")==="wishlist"){$("#wishBtn").click()}}renderCart();
+
+(async()=>{
+  try {
+    const response=await fetch("https://abczlbyaoqfjelutqyvg.supabase.co/functions/v1/solvind-admin",{
+      method:"POST",headers:{"Content-Type":"application/json","apikey":"sb_publishable_pRnBsha4m7sLzde8R_mFgA_-NnoVlF5"},
+      body:JSON.stringify({action:"products_public"})
+    });
+    if(!response.ok)return;
+    const payload=await response.json();
+    if(Array.isArray(payload.products)&&payload.products.length){
+      products=payload.products.map(p=>({...p,cat:p.category,desc:p.description,img:p.image_url}));
+      render();
+    }
+  } catch(e) { console.warn("Solvind catalogue is using its local fallback.",e); }
+})();

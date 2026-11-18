@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="sv">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#f7f6f2">
+<title>Admin — SOLVIND</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-body">
+<div class="login-screen" id="loginScreen">
+  <div class="login-panel">
+    <a class="admin-logo" href="index.html">solvind<span>.</span></a>
+    <p class="eyebrow">ADMINISTRATÖR</p>
+    <h1>Välkommen tillbaka.</h1>
+    <p class="muted">Logga in för att hantera butiken.</p>
+    <form id="loginForm">
+      <label for="adminPassword">Lösenord</label>
+      <input id="adminPassword" type="password" autocomplete="current-password" required placeholder="Ange ditt lösenord">
+      <p class="error" id="loginError" role="alert"></p>
+      <button class="primary" type="submit">Logga in <span>↗</span></button>
+    </form>
+    <a class="back-link" href="index.html">← Tillbaka till butiken</a>
+  </div>
+</div>
+<div class="admin-app" id="adminApp" hidden>
+  <aside class="sidebar">
+    <a class="admin-logo" href="index.html">solvind<span>.</span></a>
+    <p class="side-label">BUTIK</p>
+    <button class="side-link active" data-tab="products"><span>▦</span> Produkter</button>
+    <div class="sidebar-bottom"><span class="status-dot"></span> Säker adminsession <button id="logoutBtn">Logga ut ↗</button></div>
+  </aside>
+  <main class="admin-main">
+    <header class="admin-top"><div><p class="eyebrow">SOLVIND / ADMIN</p><h1>Produkter</h1></div><button class="primary add-button" id="newProduct">＋ Ny produkt</button></header>
+    <section class="stats">
+      <article><span>Totalt i sortimentet</span><strong id="totalCount">0</strong></article>
+      <article><span>Aktiva produkter</span><strong id="activeCount">0</strong></article>
+      <article><span>Slut i lager</span><strong id="outCount">0</strong></article>
+    </section>
+    <section class="products-panel">
+      <div class="panel-head"><div><h2>Alla produkter</h2><p>Hantera sortiment, priser och lagersaldo.</p></div><input id="productSearch" type="search" placeholder="Sök produkter…"></div>
+      <div class="table-wrap"><table><thead><tr><th>PRODUKT</th><th>KATEGORI</th><th>PRIS</th><th>LAGER</th><th>STATUS</th><th></th></tr></thead><tbody id="productRows"></tbody></table></div>
+      <p class="empty-state" id="emptyState" hidden>Inga produkter hittades.</p>
+    </section>
+  </main>
+</div>
+<div class="editor-backdrop" id="editorBackdrop"></div>
+<aside class="editor" id="editor" aria-label="Redigera produkt">
+  <div class="editor-head"><div><p class="eyebrow">SORTIMENT</p><h2 id="editorTitle">Ny produkt</h2></div><button class="close-editor" id="closeEditor" aria-label="Stäng">×</button></div>
+  <form id="productForm">
+    <input type="hidden" id="pId">
+    <div class="form-grid">
+      <label class="wide">Varumärke<input id="pBrand" required maxlength="100" placeholder="T.ex. LE LABO"></label>
+      <label class="wide">Produktnamn<input id="pName" required maxlength="160" placeholder="Namn på parfymen"></label>
+      <label>Pris (kr)<input id="pPrice" type="number" min="0" required></label>
+      <label>Lager<input id="pStock" type="number" min="0" value="0"></label>
+      <label>Kategori<select id="pCategory"><option value="unisex">Unisex</option><option value="women">Dam</option><option value="men">Herr</option></select></label>
+      <label>Storlek<input id="pSize" placeholder="50 ml"></label>
+      <label class="wide">Bild-URL<input id="pImage" type="url" placeholder="https://…"></label>
+      <label class="wide">Etikett<input id="pTag" placeholder="T.ex. NYHET"></label>
+      <label class="wide">Doftnoter<input id="pNotes" placeholder="Sandelträ, Kardemumma, Läder"></label>
+      <label class="wide">Doftfamiljer<input id="pFamily" placeholder="woody, warm, fresh"></label>
+      <label class="wide">Beskrivning<textarea id="pDescription" rows="4"></textarea></label>
+      <label class="check-label wide"><input id="pActive" type="checkbox" checked> Visa produkten i butiken</label>
+    </div>
+    <p class="error" id="saveError" role="alert"></p>
+    <div class="editor-actions"><button type="button" class="secondary" id="cancelEdit">Avbryt</button><button class="primary" type="submit">Spara produkt</button></div>
+  </form>
+</aside>
+<div class="admin-toast" id="adminToast" role="status"></div>
+<script src="admin.js"></script>
+</body></html>
