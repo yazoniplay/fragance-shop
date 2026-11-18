@@ -440,3 +440,8 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.65;strok
 .announcement:hover .announcement-track{animation-play-state:paused!important}
 @media(max-width:700px){.announcement,.products-page .announcement{height:29px!important;min-height:29px}.announcement-group span{padding:0 25px!important;font-size:8px;letter-spacing:.7px}}
 @media(prefers-reduced-motion:reduce){.announcement-track{animation:none!important}.announcement-group[aria-hidden="true"]{display:none}}
+
+/* Cart drawer must cover the announcement strip and sticky header */
+.header{z-index:8!important}
+#shade{z-index:30!important}
+#drawer{z-index:31!important}
