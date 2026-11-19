@@ -28,11 +28,36 @@ const categoryName=c=>({women:"DAM",men:"HERR",unisex:"UNISEX"}[c]||c.toUpperCas
 function toast(s){let t=$("#toast");t.textContent=s;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),2200)}
 function persist(){localStorage.setItem("olfact-wish",JSON.stringify(wish));localStorage.setItem("olfact-cart",JSON.stringify(cart));$("#wishCount").textContent=wish.length;$("#cartCount").textContent=cart.reduce((n,x)=>n+x.qty,0)}
 function render(){if(!$("#products"))return;let q=$("#search").value.toLowerCase();let list=products.filter(p=>(cat==="all"||p.cat===cat)&&(!familyFilter||p.family.includes(familyFilter))&&(p.name+" "+p.brand+" "+p.notes.join(" ")).toLowerCase().includes(q));let s=$("#sort").value;if(s==="low")list.sort((a,b)=>a.price-b.price);if(s==="high")list.sort((a,b)=>b.price-a.price);if(s==="name")list.sort((a,b)=>a.name.localeCompare(b.name,"sv"));$("#products").innerHTML=list.map(p=>'<article class="card"><div class="photo" data-view="'+p.id+'"><img src="'+p.img+'" alt="'+p.name+'" loading="lazy"><span class="tag">'+p.tag+'</span><button class="heart '+(wish.includes(p.id)?"saved":"")+'" data-wish="'+p.id+'" aria-label="Spara '+p.name+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.8c0 5.1-8.8 11-8.8 11s-8.8-5.9-8.8-11A4.8 4.8 0 0 1 12 6.2a4.8 4.8 0 0 1 8.8 2.6Z"/></svg></button><button class="quick" data-add="'+p.id+'">LÄGG I KASSEN · '+money(p.price)+' <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8h18l-1.5 13h-15L3 8Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg></button></div><div class="info"><p class="brand">'+p.brand+'</p><h3 class="name">'+p.name+'</h3><div class="meta"><span class="notes">'+p.size+' · '+categoryName(p.cat)+'</span><b class="price">'+money(p.price)+'</b></div></div></article>').join("");$("#empty").hidden=list.length>0}
-function add(id){let x=cart.find(i=>i.id===id);if(x)x.qty++;else cart.push({id,qty:1});persist();renderCart();toast("Tillagd i kassen")}
+
+function renderProductPage(){
+ const root=$("#productDetail");if(!root)return;
+ const id=Number(new URLSearchParams(location.search).get("id"));
+ const p=products.find(x=>x.id===id)||products[0];if(!p){root.textContent="Produkten kunde inte hittas.";return}
+ const family=(p.family||[]).map(x=>({fresh:"Fräsch",floral:"Blommig",warm:"Varm",woody:"Träig"}[x]||x)).join(" · ");
+ root.innerHTML=`
+ <div class="product-breadcrumb"><a href="index.html">Hem</a><span>›</span><a href="products.html">Parfym</a><span>›</span><span>${p.brand}</span></div>
+ <div class="product-detail-layout">
+  <div class="product-gallery"><div class="product-thumbnails"><button class="product-thumb active" type="button" aria-label="Produktbild"><img src="${p.img}" alt=""></button></div><div class="product-main-image"><img src="${p.img}" alt="${p.brand} ${p.name}"><span class="gallery-count">01 / 01</span></div></div>
+  <section class="product-buy-panel"><p class="product-brand">${p.brand}</p><p class="product-kind">EAU DE PARFUM</p><h1>${p.name}</h1>
+   <div class="product-price">${money(p.price)} <span>inkl. moms</span></div><p class="product-description">${p.desc||"En noga utvald doft från SOLVIND."}</p>
+   <div class="product-meta-line"><strong>Doftfamilj</strong><span>${family||"Parfym"}</span></div><div class="product-meta-line"><strong>Doftnoter</strong><span>${(p.notes||[]).join(", ")}</span></div>
+   <div class="product-rule"></div><label class="product-select-label" for="scentSelect">Utforska dofter</label><div class="product-select-wrap"><select id="scentSelect">${products.map(x=>`<option value="${x.id}" ${x.id===p.id?"selected":""}>${x.brand} — ${x.name}</option>`).join("")}</select><span>⌄</span></div>
+   <div class="product-rule"></div><div class="purchase-option selected"><div><span class="purchase-radio"></span><span>Engångsköp</span></div><strong>${money(p.price)}</strong></div>
+   <div class="quantity-row"><span>Antal</span><div class="quantity-control"><button type="button" data-product-qty="-1" aria-label="Minska antal">−</button><span id="productQty">1</span><button type="button" data-product-qty="1" aria-label="Öka antal">+</button></div></div>
+   <button class="product-add-button" type="button" data-product-add="${p.id}">LÄGG I KASSEN <span>↗</span></button><p class="product-delivery">Fri frakt över 1 200 kr · Leverans 1–3 vardagar</p>
+   <div class="product-benefits"><div><span class="benefit-icon">✳</span><strong>Utvalda dofter</strong><small>Noga utvalt sortiment</small></div><div><span class="benefit-icon">◷</span><strong>Trygg leverans</strong><small>Spårbar frakt</small></div><div><span class="benefit-icon">◇</span><strong>Personlig service</strong><small>Vi hjälper dig hitta rätt</small></div></div>
+   <div class="product-details"><details open><summary>Om doften <span>＋</span></summary><p>${p.desc||""}</p></details><details><summary>Doftnoter <span>＋</span></summary><p>${(p.notes||[]).join(" · ")}</p></details><details><summary>Storlek & detaljer <span>＋</span></summary><p>${p.size||""} · ${categoryName(p.cat)}</p></details></div>
+  </section>
+ </div>`;
+}
+$("#productDetail")?.addEventListener("click",e=>{const b=e.target.closest("[data-product-add]");if(b){add(+b.dataset.productAdd,+($("#productQty")?.textContent||1));return}const q=e.target.closest("[data-product-qty]");if(q){const n=$("#productQty");n.textContent=Math.max(1,Math.min(10,+n.textContent+(+q.dataset.productQty)));}});
+document.addEventListener("change",e=>{if(e.target.id==="scentSelect")location.href="product.html?id="+encodeURIComponent(e.target.value)});
+
+function add(id,quantity=1){let x=cart.find(i=>i.id===id);if(x)x.qty+=quantity;else cart.push({id,qty:quantity});persist();renderCart();toast("Tillagd i kassen")}
 function renderCart(){if(!$("#cartItems"))return;let total=0;$("#cartItems").className="cart-list";$("#cartItems").innerHTML=cart.length?cart.map(x=>{let p=products.find(y=>y.id===x.id);if(!p)return"";total+=p.price*x.qty;return '<div class="cart-row"><img src="'+p.img+'" alt=""><div><p>'+p.brand+'</p><h3>'+p.name+'</h3><p>'+p.size+' · '+money(p.price)+'</p><div class="qty"><button data-qty="'+p.id+'" data-d="-1">−</button> '+x.qty+' <button data-qty="'+p.id+'" data-d="1">+</button></div></div><div><b>'+money(p.price*x.qty)+'</b><br><button class="remove" data-remove="'+p.id+'">Ta bort</button></div></div>'}).join(""):'<p class="empty">Din kasse väntar på en ny favorit.</p>';$("#subtotal").textContent=money(total);$("#itemCount").textContent="("+cart.reduce((n,x)=>n+x.qty,0)+")";persist()}
 function openBag(){$("#shade").classList.add("open");$("#drawer").classList.add("open")}
 function closeAll(){$("#shade").classList.remove("open");$("#drawer").classList.remove("open");$("#modal").classList.remove("open")}
-function detail(id){let p=products.find(x=>x.id===id);$("#modalContent").innerHTML='<div class="detail"><img src="'+p.img+'" alt="'+p.name+'"><div><p class="eyebrow">[ '+p.brand+' ]</p><h2>'+p.name+'</h2><p>'+p.size+' · '+categoryName(p.cat)+'</p><h3>'+money(p.price)+'</h3><p>'+p.desc+'</p><p class="eyebrow">[ DOFTNOTER ]</p><div class="chips">'+p.notes.map(n=>'<span>'+n+'</span>').join("")+'</div><button class="button button-dark" data-add="'+p.id+'">LÄGG I KASSEN ↗</button></div></div>';$("#shade").classList.add("open");$("#modal").classList.add("open")}
+function detail(id){location.href="product.html?id="+encodeURIComponent(id)}
 $("#products")?.addEventListener("click",e=>{let w=e.target.closest("[data-wish]"),a=e.target.closest("[data-add]"),v=e.target.closest("[data-view]");if(w){e.stopPropagation();let id=+w.dataset.wish;wish=wish.includes(id)?wish.filter(x=>x!==id):wish.concat(id);persist();render();toast(wish.includes(id)?"Sparad":"Borttagen")}else if(a){e.stopPropagation();add(+a.dataset.add)}else if(v)detail(+v.dataset.view)});
 $("#cartItems")?.addEventListener("click",e=>{let q=e.target.closest("[data-qty]"),r=e.target.closest("[data-remove]");if(q){let x=cart.find(i=>i.id===+q.dataset.qty);x.qty+=+q.dataset.d;if(x.qty<1)cart=cart.filter(i=>i!==x);renderCart()}if(r){cart=cart.filter(i=>i.id!==+r.dataset.remove);renderCart()}});
 $("#tabs")?.addEventListener("click",e=>{let b=e.target.closest("[data-cat]");if(!b)return;cat=b.dataset.cat;familyFilter=null;document.querySelectorAll("[data-cat]").forEach(x=>x.classList.toggle("active",x===b));$("#finderNote").textContent="";render()});
@@ -48,7 +73,7 @@ $("#checkout").addEventListener("click",()=>toast("Kassan är inte tillgänglig 
 $("#newsletter")?.addEventListener("submit",e=>{e.preventDefault();$("#newsMessage").textContent="Tack! Du är anmäld.";e.target.reset()});
 $("#modalContent").addEventListener("click",e=>{let b=e.target.closest("[data-add]");if(b){add(+b.dataset.add);closeAll()}});
 document.querySelectorAll("#nav a").forEach(a=>a.addEventListener("click",()=>setMenu(false)));
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeAll();setMenu(false)}});if($("#products")){const params=new URLSearchParams(location.search);if(params.get("mood"))familyFilter=params.get("mood");render();if(params.get("view")==="wishlist"){$("#wishBtn").click()}}renderCart();
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeAll();setMenu(false)}});if($("#products")){const params=new URLSearchParams(location.search);if(params.get("mood"))familyFilter=params.get("mood");render();if(params.get("view")==="wishlist"){$("#wishBtn").click()}}renderProductPage();renderCart();
 
 (async()=>{
   try {
@@ -60,7 +85,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeAll();setMenu(
     const payload=await response.json();
     if(Array.isArray(payload.products)&&payload.products.length){
       products=payload.products.map(p=>({...p,cat:p.category,desc:p.description,img:p.image_url}));
-      render();
+      render();renderProductPage();
     }
   } catch(e) { console.warn("Solvind catalogue is using its local fallback.",e); }
 })();
