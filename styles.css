@@ -548,3 +548,26 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.65;strok
 .category-card strong{display:block;line-height:1.12;overflow-wrap:normal;word-break:normal}
 .category-card i{display:inline-flex;align-items:center;gap:5px;margin-top:8px;white-space:nowrap}
 @media(max-width:700px){.category-card{row-gap:18px}.category-card strong{line-height:1.16}.category-card i{margin-top:6px}}
+
+
+/* Manual Swish checkout */
+.swish-checkout{max-width:560px;margin:0 auto;padding:34px 28px;max-height:82vh;overflow:auto;color:var(--ink)}
+.swish-checkout>.eyebrow{font-size:9px;letter-spacing:1.7px;color:var(--accent);margin:0 0 10px}
+.swish-checkout h2{font-size:30px;font-weight:500;letter-spacing:-1px;margin:0 0 9px}
+.swish-intro,.swish-note{font-size:12px;line-height:1.65;color:var(--muted)}
+.swish-total{display:flex;align-items:center;justify-content:space-between;padding:18px 0;border-bottom:1px solid var(--line);font-size:13px}
+.swish-total strong{font-size:24px;color:var(--accent)}
+.swish-payment-card{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:20px;margin:18px 0;background:var(--surface);border:1px solid var(--line)}
+.swish-label{font-size:9px;letter-spacing:1.2px;color:var(--muted);margin-top:5px}
+.swish-number{font-size:24px;letter-spacing:.4px}
+.swish-payment-card>strong:not(.swish-number){font-size:15px;letter-spacing:.5px}
+.swish-copy{border:1px solid var(--line);background:transparent;color:var(--ink);padding:7px 10px;font-size:10px;cursor:pointer;margin-bottom:5px}
+.swish-breakdown{display:flex;flex-direction:column;gap:9px;padding:4px 0 18px;border-bottom:1px solid var(--line);font-size:12px}
+.swish-breakdown>div{display:flex;justify-content:space-between}
+.swish-breakdown-total{padding-top:10px;border-top:1px solid var(--line);font-size:14px}
+.swish-form{display:grid;gap:8px;padding-top:18px}
+.swish-form label{font-size:11px;font-weight:600;margin-top:7px}
+.swish-form input,.swish-form textarea{width:100%;border:1px solid var(--line);border-radius:2px;padding:12px;background:var(--bg);color:var(--ink);font:inherit;font-size:13px;resize:vertical}
+.swish-form .button{margin-top:12px;min-height:50px}
+.swish-note{font-size:10px;margin:14px 0 0}
+@media(max-width:600px){.swish-checkout{padding:27px 19px}.swish-checkout h2{font-size:26px}.swish-number{font-size:21px}}
