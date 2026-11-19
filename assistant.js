@@ -1,5 +1,4 @@
 (() => {
-  const MODEL = "gemini-3.5-flash-lite";
   const HISTORY_LIMIT = 12;
   const history = [];
   const $ = (s) => document.querySelector(s);
@@ -27,7 +26,6 @@
         <input id="solvindAiInput" type="text" maxlength="1200" placeholder="Beskriv doften du söker..." autocomplete="off">
         <button type="submit" aria-label="Skicka meddelande">↗</button>
       </form>
-      <p class="solvind-ai-footnote">DRIVS AV GEMINI 3.5 FLASH-LITE</p>
     </section>`;
   document.body.insertAdjacentHTML("beforeend", markup);
   const panel = $("#solvindAiPanel"), messages = $("#solvindAiMessages"), input = $("#solvindAiInput");
