@@ -571,3 +571,7 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.65;strok
 .swish-form .button{margin-top:12px;min-height:50px}
 .swish-note{font-size:10px;margin:14px 0 0}
 @media(max-width:600px){.swish-checkout{padding:27px 19px}.swish-checkout h2{font-size:26px}.swish-number{font-size:21px}}
+
+
+/* Checkout must sit above the cart drawer and its backdrop. */
+#modal{z-index:40!important}
