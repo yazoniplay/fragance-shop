@@ -1,8 +1,8 @@
 
 /* SOLVIND Gemini fragrance assistant */
-.solvind-ai-launch{position:fixed;right:26px;bottom:25px;z-index:40;display:flex;align-items:center;gap:10px;padding:13px 17px;border:1px solid var(--line);background:var(--ink);color:var(--bg);font-size:9px;letter-spacing:1.1px;cursor:pointer;box-shadow:0 8px 30px #00000018;transition:transform .2s,background .2s}
+.solvind-ai-launch{position:fixed;right:26px;bottom:25px;z-index:40;width:62px;height:62px;display:grid;place-items:center;padding:0;border:1px solid var(--line);border-radius:50%;background:var(--ink);color:var(--bg);cursor:pointer;box-shadow:0 8px 30px #00000020;transition:transform .2s,background .2s}
 .solvind-ai-launch:hover{transform:translateY(-3px)}
-.solvind-ai-launch-mark{font-size:18px;line-height:1}
+.solvind-ai-launch-icon{width:27px;height:27px;display:block}
 .solvind-ai-panel{position:fixed;right:26px;bottom:83px;z-index:41;width:min(410px,calc(100vw - 28px));height:min(620px,calc(100dvh - 120px));display:flex;flex-direction:column;background:var(--bg);border:1px solid var(--line);box-shadow:0 18px 70px #00000024;opacity:0;visibility:hidden;transform:translateY(12px) scale(.985);transform-origin:bottom right;transition:opacity .22s,transform .22s,visibility .22s}
 .solvind-ai-panel.open{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
 .solvind-ai-header{padding:22px 22px 17px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
@@ -36,4 +36,4 @@
 .solvind-ai-form button{width:43px;border:0;background:var(--ink);color:var(--bg);font-size:19px;cursor:pointer}
 .solvind-ai-form button:disabled{opacity:.5}
 .solvind-ai-footnote{text-align:center;font-size:7px;letter-spacing:1.2px;color:var(--muted);margin:0;padding:0 0 12px}
-@media(max-width:600px){.solvind-ai-launch{right:14px;bottom:14px;padding:12px 14px}.solvind-ai-panel{right:8px;bottom:68px;width:calc(100vw - 16px);height:min(650px,calc(100dvh - 82px))}.solvind-ai-header{padding:18px}.solvind-ai-messages{padding:15px}}
+@media(max-width:600px){.solvind-ai-launch{right:14px;bottom:14px;width:56px;height:56px}.solvind-ai-panel{right:8px;bottom:68px;width:calc(100vw - 16px);height:min(650px,calc(100dvh - 82px))}.solvind-ai-header{padding:18px}.solvind-ai-messages{padding:15px}}
