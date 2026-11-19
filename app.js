@@ -87,7 +87,7 @@ $("#checkout").addEventListener("click",()=>toast("Kassan är inte tillgänglig 
 $("#newsletter")?.addEventListener("submit",e=>{e.preventDefault();$("#newsMessage").textContent="Tack! Du är anmäld.";e.target.reset()});
 $("#modalContent").addEventListener("click",e=>{let b=e.target.closest("[data-add]");if(b){add(+b.dataset.add);closeAll()}});
 document.querySelectorAll("#nav a").forEach(a=>a.addEventListener("click",()=>setMenu(false)));
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeAll();setMenu(false)}});if($("#products")){const params=new URLSearchParams(location.search);if(params.get("mood"))familyFilter=params.get("mood");render();if(params.get("view")==="wishlist"){$("#wishBtn").click()}}renderProductPage();updateProductQuantityPrice();renderCart();
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeAll();setMenu(false)}});if($("#products")){const params=new URLSearchParams(location.search);const requestedCategory=params.get("cat");if(["women","men","unisex"].includes(requestedCategory)){cat=requestedCategory;document.querySelectorAll("[data-cat]").forEach(x=>x.classList.toggle("active",x.dataset.cat===cat));}if(params.get("mood"))familyFilter=params.get("mood");render();if(params.get("view")==="wishlist"){$("#wishBtn").click()}}renderProductPage();updateProductQuantityPrice();renderCart();
 
 (async()=>{
   try {
