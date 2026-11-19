@@ -88,6 +88,9 @@ menuShade?.addEventListener("click",()=>setMenu(false));
 const SWISH_NUMBER="+46707358046";
 function openCheckout(){
  if(!cart.length){toast("Din kasse är tom");return}
+ // Close the cart drawer and its backdrop before opening checkout.
+ $("#shade").classList.remove("open");
+ $("#drawer").classList.remove("open");
  const subtotal=cart.reduce((sum,item)=>{const p=resolveCartItem(item.id);return sum+(p?discountedLineTotal(p,item.qty):0)},0);
  const shipping=subtotal>=1200?0:49,total=subtotal+shipping;
  const reference="SOLVIND-"+Date.now().toString().slice(-8);
