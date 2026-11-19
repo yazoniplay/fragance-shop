@@ -83,7 +83,43 @@ function setMenu(open){menuNav?.classList.toggle("open",open);menuShade?.classLi
 menuBtn?.addEventListener("click",()=>setMenu(!menuNav.classList.contains("open")));
 $("#menuClose")?.addEventListener("click",()=>setMenu(false));
 menuShade?.addEventListener("click",()=>setMenu(false));
-$("#checkout").addEventListener("click",()=>toast("Kassan är inte tillgänglig ännu"));
+
+// Manual Swish checkout (orders are sent to the store by email; payment is verified manually).
+const SWISH_NUMBER="+46707358046";
+function openCheckout(){
+ if(!cart.length){toast("Din kasse är tom");return}
+ const subtotal=cart.reduce((sum,item)=>{const p=resolveCartItem(item.id);return sum+(p?discountedLineTotal(p,item.qty):0)},0);
+ const shipping=subtotal>=1200?0:49,total=subtotal+shipping;
+ const reference="SOLVIND-"+Date.now().toString().slice(-8);
+ const rows=cart.map(item=>{const p=resolveCartItem(item.id);return p?p.name+" × "+item.qty+" — "+money(discountedLineTotal(p,item.qty)):""}).filter(Boolean).join("\\n");
+ $("#modalContent").innerHTML=`
+  <section class="swish-checkout">
+   <p class="eyebrow">SOLVIND / KASSA</p><h2>Betala med Swish</h2>
+   <p class="swish-intro">Fyll i dina uppgifter. Betala sedan beloppet i Swish-appen med din orderreferens.</p>
+   <div class="swish-total"><span>Att betala</span><strong>${money(total)}</strong></div>
+   <div class="swish-payment-card"><span class="swish-label">SWISH-NUMMER</span><strong class="swish-number">070 735 80 46</strong><button type="button" id="copySwish" class="swish-copy">Kopiera nummer</button><span class="swish-label">MEDDELANDE / REFERENS</span><strong>${reference}</strong><button type="button" id="copyReference" class="swish-copy">Kopiera referens</button></div>
+   <div class="swish-breakdown"><div><span>Delsumma</span><span>${money(subtotal)}</span></div><div><span>Frakt</span><span>${shipping===0?"Fri frakt":money(shipping)}</span></div><div class="swish-breakdown-total"><strong>Totalt</strong><strong>${money(total)}</strong></div></div>
+   <form id="swishOrderForm" class="swish-form">
+    <label for="swishName">Namn</label><input id="swishName" name="name" autocomplete="name" required>
+    <label for="swishEmail">E-post</label><input id="swishEmail" name="email" type="email" autocomplete="email" required>
+    <label for="swishPhone">Telefon</label><input id="swishPhone" name="phone" type="tel" autocomplete="tel" required>
+    <label for="swishAddress">Leveransadress</label><textarea id="swishAddress" name="address" rows="3" autocomplete="street-address" required></textarea>
+    <button class="button button-dark full" type="submit">Jag har betalat – skicka beställning ↗</button>
+   </form>
+   <p class="swish-note">Beställningen skickas till SOLVIND via e-post. Den behandlas när betalningen har kontrollerats. Spara din Swish-bekräftelse.</p>
+  </section>`;
+ $("#modal").classList.add("open");
+ $("#copySwish").addEventListener("click",()=>{navigator.clipboard?.writeText(SWISH_NUMBER).then(()=>toast("Swish-numret kopierat")).catch(()=>toast("Kunde inte kopiera numret"))});
+ $("#copyReference").addEventListener("click",()=>{navigator.clipboard?.writeText(reference).then(()=>toast("Referensen kopierad")).catch(()=>toast("Kunde inte kopiera referensen"))});
+ $("#swishOrderForm").addEventListener("submit",e=>{
+  e.preventDefault();const data=new FormData(e.target);
+  const subject=encodeURIComponent("SOLVIND-beställning "+reference);
+  const body=encodeURIComponent("Ny beställning – inväntar manuell betalningskontroll\\n\\nReferens: "+reference+"\\nNamn: "+data.get("name")+"\\nE-post: "+data.get("email")+"\\nTelefon: "+data.get("phone")+"\\nAdress: "+data.get("address")+"\\n\\nProdukter:\\n"+rows+"\\n\\nDelsumma: "+money(subtotal)+"\\nFrakt: "+(shipping===0?"Fri frakt":money(shipping))+"\\nTotalt: "+money(total)+"\\nBetalning: Swish – kontrollera manuellt.");
+  window.location.href="mailto:hej@solvind.se?subject="+subject+"&body="+body;
+  toast("E-postutkast öppnas – skicka det för att lägga beställningen.");
+ });
+}
+$("#checkout").addEventListener("click",openCheckout);
 $("#newsletter")?.addEventListener("submit",e=>{e.preventDefault();$("#newsMessage").textContent="Tack! Du är anmäld.";e.target.reset()});
 $("#modalContent").addEventListener("click",e=>{let b=e.target.closest("[data-add]");if(b){add(+b.dataset.add);closeAll()}});
 document.querySelectorAll("#nav a").forEach(a=>a.addEventListener("click",()=>setMenu(false)));
