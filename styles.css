@@ -541,3 +541,10 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.65;strok
 
 /* SOLVIND brand wordmark */
 .header .logo{display:flex;align-items:center;width:154px;height:48px;overflow:hidden;flex:0 0 auto}.header .logo img{display:block;width:100%;height:auto;object-fit:contain}footer .logo{display:flex;align-items:center;width:154px;height:48px;overflow:hidden}footer .logo img{display:block;width:100%;height:auto;object-fit:contain}@media(max-width:700px){.header .logo{width:128px;height:42px}footer .logo{width:138px;height:44px}}
+
+
+/* Scent-family cards: keep the title and action visually separated */
+.category-card{row-gap:24px}
+.category-card strong{display:block;line-height:1.12;overflow-wrap:normal;word-break:normal}
+.category-card i{display:inline-flex;align-items:center;gap:5px;margin-top:8px;white-space:nowrap}
+@media(max-width:700px){.category-card{row-gap:18px}.category-card strong{line-height:1.16}.category-card i{margin-top:6px}}
