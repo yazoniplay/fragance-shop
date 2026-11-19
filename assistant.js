@@ -43,13 +43,27 @@
   $("#solvindAiLaunch").addEventListener("click",()=>setOpen(!panel.classList.contains("open")));
   $("#solvindAiClose").addEventListener("click",()=>setOpen(false));
   $("#solvindAiPrompts").addEventListener("click",e=>{const b=e.target.closest("[data-prompt]");if(b){input.value=b.dataset.prompt;$("#solvindAiForm").requestSubmit();}});
-  const catalogue = () => (Array.isArray(window.products)?window.products:[]).map(p=>({brand:p.brand,name:p.name,price:p.price,notes:p.notes,description:p.desc||p.description,category:p.cat||p.category})).slice(0,60);
+  async function fetchCatalogue(){
+    const response=await fetch("https://abczlbyaoqfjelutqyvg.supabase.co/functions/v1/solvind-admin",{
+      method:"POST",headers:{"Content-Type":"application/json","apikey":"sb_publishable_pRnBsha4m7sLzde8R_mFgA_-NnoVlF5"},
+      body:JSON.stringify({action:"products_public"}),
+      cache:"no-store"
+    });
+    const payload=await response.json();
+    if(!response.ok||!Array.isArray(payload.products))throw new Error("Jag kan inte hämta butikens aktuella produktutbud just nu. Försök igen om en liten stund.");
+    return payload.products.map(p=>({
+      brand:p.brand,name:p.name,price:p.price,currency:"SEK",size:p.size,
+      notes:Array.isArray(p.notes)?p.notes:[],family:Array.isArray(p.family)?p.family:[],
+      description:p.description,category:p.category,stock:p.stock
+    }));
+  }
   async function send(text){
     addMessage("user",text);input.value="";input.disabled=true;
-    const typing=addMessage("assistant","Jag letar bland dofterna…");typing.classList.add("typing");
-    const system = "Du är SOLVINDs personliga doftrådgivare i en svensk parfymbutik. Svara på svenska om inte kunden skriver på ett annat språk. Var varm, kunnig, kortfattad och naturlig, aldrig överdrivet säljig. Hjälp kunden välja doft efter tillfälle, noter, säsong, stil och budget. Rekommendera endast produkter som finns i produktkatalogen nedan. Hitta aldrig på priser, lagerstatus, doftnoter eller produkter. Om katalogen inte innehåller något som passar, säg det och ställ en följdfråga. Nämn gärna produktnamn exakt. Produktkatalog: "+JSON.stringify(catalogue());
+    const typing=addMessage("assistant","Jag hämtar butikens aktuella sortiment…");typing.classList.add("typing");
     history.push({role:"user",parts:[{text}]});
     try{
+      const currentCatalogue=await fetchCatalogue();
+      const system = "Du är SOLVINDs personliga doftrådgivare i en svensk parfymbutik. Svara på svenska om inte kunden skriver på ett annat språk. Var varm, kunnig, kortfattad och naturlig, aldrig överdrivet säljig. Hjälp kunden välja doft efter tillfälle, noter, säsong, stil och budget. Rekommendera endast produkter som finns i den aktuella produktkatalogen nedan. Katalogen hämtas direkt från butikens databas vid varje fråga och är den enda sanningskällan. Hitta aldrig på priser, lagerstatus, doftnoter eller produkter. Om katalogen är tom, säg tydligt att butiken inte har några aktiva produkter just nu. Om en produkt har 0 i lager ska du säga att den är slut i lager och inte rekommendera köp. Om katalogen inte innehåller något som passar, säg det och ställ en följdfråga. Nämn produktnamn exakt. Produktkatalog (uppdaterad precis nu): "+JSON.stringify(currentCatalogue);
       const response=await fetch("https://abczlbyaoqfjelutqyvg.supabase.co/functions/v1/solvind-assistant",{
         method:"POST",headers:{"Content-Type":"application/json","apikey":"sb_publishable_pRnBsha4m7sLzde8R_mFgA_-NnoVlF5"},
         body:JSON.stringify({contents:history.slice(-HISTORY_LIMIT),system_instruction:{parts:[{text:system}]}})
