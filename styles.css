@@ -509,3 +509,15 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.65;strok
 .bundle-price del{font-size:12px;color:var(--muted)}
 .bundle-add{width:100%;justify-content:center;min-height:52px}
 @media(max-width:700px){.bundles-main{padding:42px 5% 70px}.bundles-intro{margin-bottom:34px}.bundle-card{grid-template-columns:1fr}.bundle-images{min-height:250px;height:62vw;max-height:340px}.bundle-images img{min-height:250px}.bundle-copy{padding:25px 21px 27px}.bundle-copy h2{font-size:30px}}
+
+/* Quantity-based fragrance discounts */
+.quantity-discounts{border:1px solid var(--line);padding:16px;margin:18px 0;background:var(--surface)}
+.quantity-discounts-head{font-size:12px;font-weight:650;margin-bottom:12px}
+.quantity-discount-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.quantity-discount-steps span{display:flex;flex-direction:column;gap:5px;text-align:center;padding:10px 4px;border:1px solid var(--line);background:var(--bg);color:var(--muted)}
+.quantity-discount-steps span.active{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 9%,var(--bg));color:var(--ink)}
+.quantity-discount-steps b{font-size:12px;font-weight:650}
+.quantity-discount-steps small{font-size:10px;color:var(--accent)}
+.quantity-discounts>p{font-size:11px;color:var(--muted);margin:11px 0 0;line-height:1.5}
+.product-price del{font-size:13px;color:var(--muted);font-weight:400;margin-right:5px}
+.cart-discount{font-size:10px;color:var(--muted);text-decoration:line-through}

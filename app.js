@@ -23,19 +23,10 @@ let products=[
 {id:6,brand:"CHANEL",name:"Coco Mademoiselle",price:1690,cat:"women",size:"100 ml",tag:"TIDLÖS",notes:["Apelsin","Ros","Patchouli"],family:["floral","warm"],desc:"Gnistrande citrus, ros och patchouli i en elegant doft med både lätthet och djup.",img:"https://images.unsplash.com/photo-1595425970377-c9703cf48b6d?auto=format&fit=crop&w=700&q=85"},
 {id:7,brand:"TOM FORD",name:"Oud Wood",price:2790,cat:"men",size:"50 ml",tag:"DJUP & MÖRK",notes:["Oud","Sandelträ","Bärnsten"],family:["woody","warm"],desc:"Sällsynt oud, sandelträ och varma kryddor. Mjuk, mörk och kompromisslöst elegant.",img:"https://images.unsplash.com/photo-1594035910387-fea47794261f?auto=format&fit=crop&w=700&q=85"},
 {id:8,brand:"DIPTYQUE",name:"Philosykos",price:1690,cat:"unisex",size:"75 ml",tag:"FRISK FAVORIT",notes:["Fikonblad","Kokos","Cederträ"],family:["fresh","woody"],desc:"En promenad genom en solvarm fikonlund. Gröna blad, mjölkig frukt och torrt trä.",img:"https://images.unsplash.com/photo-1615634260167-c8cdede054de?auto=format&fit=crop&w=700&q=85"}];
-const bundleDefinitions=[
- {id:101,name:"Signaturduon",subtitle:"Två dofter. En självklar kombination.",description:"En ren, mjuk vardagsdoft möter varmt sandelträ och kryddor.",ids:[1,3]},
- {id:102,name:"Ljus & blommande",subtitle:"En lättare sida av parfym.",description:"Lavendel, apelsinblomma och gröna fikonnoter i två uttrycksfulla dofter.",ids:[2,8]},
- {id:103,name:"Trä & karaktär",subtitle:"För dig som gillar djup.",description:"Två tydliga kompositioner med trä, oud och varma noter.",ids:[7,5]}
-];
-function getBundle(def){
- const items=def.ids.map(id=>products.find(p=>Number(p.id)===id)).filter(Boolean);
- if(items.length!==def.ids.length)return null;
- const regular=items.reduce((sum,p)=>sum+Number(p.price||0),0);
- const price=Math.round(regular*.9/10)*10;
- return {id:def.id,name:def.name,brand:"SOLVIND PRESENTSET",subtitle:def.subtitle,description:def.description,ids:def.ids,items,regular,price,img:items[0].img,cat:"unisex",size:items.map(p=>p.size).join(" + "),notes:items.flatMap(p=>p.notes||[])};
-}
-function resolveCartItem(id){return products.find(p=>Number(p.id)===Number(id))||bundleDefinitions.map(getBundle).find(p=>p&&p.id===Number(id))}
+function quantityDiscount(q){return q>=4?20:q===3?15:q===2?10:0}
+function discountedUnitPrice(p,q){return Math.round(Number(p.price)*(1-quantityDiscount(q)/100))}
+function discountedLineTotal(p,q){return discountedUnitPrice(p,q)*q}
+function resolveCartItem(id){return products.find(p=>Number(p.id)===Number(id))}
 
 const $=s=>document.querySelector(s),money=n=>new Intl.NumberFormat("sv-SE",{style:"currency",currency:"SEK",maximumFractionDigits:0}).format(n);let cat="all",familyFilter=null,wish=JSON.parse(localStorage.getItem("olfact-wish")||"[]"),cart=JSON.parse(localStorage.getItem("olfact-cart")||"[]"),toastTimer;
 const categoryName=c=>({women:"DAM",men:"HERR",unisex:"UNISEX"}[c]||c.toUpperCase());
@@ -43,13 +34,6 @@ function toast(s){let t=$("#toast");t.textContent=s;t.classList.add("show");clea
 function persist(){localStorage.setItem("olfact-wish",JSON.stringify(wish));localStorage.setItem("olfact-cart",JSON.stringify(cart));$("#wishCount").textContent=wish.length;$("#cartCount").textContent=cart.reduce((n,x)=>n+x.qty,0)}
 function render(){if(!$("#products"))return;let q=$("#search").value.toLowerCase();let list=products.filter(p=>(cat==="all"||p.cat===cat)&&(!familyFilter||p.family.includes(familyFilter))&&(p.name+" "+p.brand+" "+p.notes.join(" ")).toLowerCase().includes(q));let s=$("#sort").value;if(s==="low")list.sort((a,b)=>a.price-b.price);if(s==="high")list.sort((a,b)=>b.price-a.price);if(s==="name")list.sort((a,b)=>a.name.localeCompare(b.name,"sv"));$("#products").innerHTML=list.map(p=>'<article class="card"><div class="photo" data-view="'+p.id+'"><img src="'+p.img+'" alt="'+p.name+'" loading="lazy"><span class="tag">'+p.tag+'</span><button class="heart '+(wish.includes(p.id)?"saved":"")+'" data-wish="'+p.id+'" aria-label="Spara '+p.name+'"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.8c0 5.1-8.8 11-8.8 11s-8.8-5.9-8.8-11A4.8 4.8 0 0 1 12 6.2a4.8 4.8 0 0 1 8.8 2.6Z"/></svg></button><button class="quick" data-add="'+p.id+'">LÄGG I KASSEN · '+money(p.price)+' <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8h18l-1.5 13h-15L3 8Z"/><path d="M8 8V6a4 4 0 0 1 8 0v2"/></svg></button></div><div class="info"><p class="brand">'+p.brand+'</p><h3 class="name">'+p.name+'</h3><div class="meta"><span class="notes">'+p.size+' · '+categoryName(p.cat)+'</span><b class="price">'+money(p.price)+'</b></div></div></article>').join("");$("#empty").hidden=list.length>0}
 
-
-function renderBundlesPage(){
- const grid=$("#bundlesGrid");if(!grid)return;
- const cards=bundleDefinitions.map(def=>getBundle(def)).filter(Boolean);
- grid.innerHTML=cards.map(b=>'<article class="bundle-card"><div class="bundle-images">'+b.items.map(p=>'<img src="'+p.img+'" alt="'+p.name+'">').join("")+'<span class="bundle-save">10% på setet</span></div><div class="bundle-copy"><p class="eyebrow">SOLVIND PRESENTSET</p><h2>'+b.name+'</h2><p class="bundle-subtitle">'+b.subtitle+'</p><p class="bundle-description">'+b.description+'</p><div class="bundle-includes">'+b.items.map(p=>'<a href="product.html?id='+p.id+'">'+p.brand+' · '+p.name+'</a>').join("")+'</div><div class="bundle-price"><strong>'+money(b.price)+'</strong><del>'+money(b.regular)+'</del></div><button class="button button-dark bundle-add" type="button" data-bundle-add="'+b.id+'">LÄGG SETET I KASSEN <span>↗</span></button></div></article>').join("");
-}
-$("#bundlesGrid")?.addEventListener("click",e=>{const b=e.target.closest("[data-bundle-add]");if(!b)return;add(+b.dataset.bundleAdd);});
 
 function renderProductPage(){
  const root=$("#productDetail");if(!root)return;
@@ -61,10 +45,11 @@ function renderProductPage(){
  <div class="product-detail-layout">
   <div class="product-gallery"><div class="product-thumbnails"><button class="product-thumb active" type="button" aria-label="Produktbild"><img src="${p.img}" alt=""></button></div><div class="product-main-image"><img src="${p.img}" alt="${p.brand} ${p.name}"><span class="gallery-count">01 / 01</span></div></div>
   <section class="product-buy-panel"><p class="product-brand">${p.brand}</p><p class="product-kind">EAU DE PARFUM</p><h1>${p.name}</h1>
-   <div class="product-price">${money(p.price)} <span>inkl. moms</span></div><p class="product-description">${p.desc||"En noga utvald doft från SOLVIND."}</p>
+   <div class="product-price" id="productPrice">${money(p.price)} <span>inkl. moms</span></div><p class="product-description">${p.desc||"En noga utvald doft från SOLVIND."}</p>
    <div class="product-meta-line"><strong>Doftfamilj</strong><span>${family||"Parfym"}</span></div><div class="product-meta-line"><strong>Doftnoter</strong><span>${(p.notes||[]).join(", ")}</span></div>
    <div class="product-rule"></div><label class="product-select-label" for="scentSelect">Utforska dofter</label><div class="product-select-wrap"><select id="scentSelect">${products.map(x=>`<option value="${x.id}" ${x.id===p.id?"selected":""}>${x.brand} — ${x.name}</option>`).join("")}</select><span>⌄</span></div>
    <div class="product-rule"></div><div class="purchase-option selected"><div><span class="purchase-radio"></span><span>Engångsköp</span></div><strong>${money(p.price)}</strong></div>
+   <div class="quantity-discounts"><div class="quantity-discounts-head">Köp fler — spara mer</div><div class="quantity-discount-steps"><span class="active" data-tier="1"><b>1 st</b><small>Ord. pris</small></span><span data-tier="2"><b>2 st</b><small>−10%</small></span><span data-tier="3"><b>3 st</b><small>−15%</small></span><span data-tier="4"><b>4+ st</b><small>−20%</small></span></div><p id="quantityDiscountMessage">Rabatten dras automatiskt när du väljer fler flaskor.</p></div>
    <div class="quantity-row"><span>Antal</span><div class="quantity-control"><button type="button" data-product-qty="-1" aria-label="Minska antal">−</button><span id="productQty">1</span><button type="button" data-product-qty="1" aria-label="Öka antal">+</button></div></div>
    <button class="product-add-button" type="button" data-product-add="${p.id}">LÄGG I KASSEN <span>↗</span></button><p class="product-delivery">Fri frakt över 1 200 kr · Leverans 1–3 vardagar</p>
    <div class="product-benefits"><div><span class="benefit-icon">✳</span><strong>Utvalda dofter</strong><small>Noga utvalt sortiment</small></div><div><span class="benefit-icon">◷</span><strong>Trygg leverans</strong><small>Spårbar frakt</small></div><div><span class="benefit-icon">◇</span><strong>Personlig service</strong><small>Vi hjälper dig hitta rätt</small></div></div>
@@ -72,11 +57,18 @@ function renderProductPage(){
   </section>
  </div>`;
 }
-$("#productDetail")?.addEventListener("click",e=>{const b=e.target.closest("[data-product-add]");if(b){add(+b.dataset.productAdd,+($("#productQty")?.textContent||1));return}const q=e.target.closest("[data-product-qty]");if(q){const n=$("#productQty");n.textContent=Math.max(1,Math.min(10,+n.textContent+(+q.dataset.productQty)));}});
+function updateProductQuantityPrice(){
+ const qty=Number($("#productQty")?.textContent||1),id=Number(new URLSearchParams(location.search).get("id")),p=products.find(x=>x.id===id)||products[0],discount=quantityDiscount(qty);
+ const price=$("#productPrice"),message=$("#quantityDiscountMessage");
+ if(price)price.innerHTML=discount?'<del>'+money(p.price)+'</del> '+money(discountedUnitPrice(p,qty))+' <span>per flaska · '+discount+'% rabatt</span>':money(p.price)+' <span>inkl. moms</span>';
+ if(message)message.textContent=discount?'Du sparar '+money((p.price-discountedUnitPrice(p,qty))*qty)+' på '+qty+' flaskor.':'Rabatten dras automatiskt när du väljer fler flaskor.';
+ document.querySelectorAll("[data-tier]").forEach(el=>el.classList.toggle("active",Number(el.dataset.tier)===Math.min(qty,4)));
+}
+$("#productDetail")?.addEventListener("click",e=>{const b=e.target.closest("[data-product-add]");if(b){add(+b.dataset.productAdd,+($("#productQty")?.textContent||1));return}const q=e.target.closest("[data-product-qty]");if(q){const n=$("#productQty");n.textContent=Math.max(1,Math.min(10,+n.textContent+(+q.dataset.productQty)));updateProductQuantityPrice();}});
 document.addEventListener("change",e=>{if(e.target.id==="scentSelect")location.href="product.html?id="+encodeURIComponent(e.target.value)});
 
 function add(id,quantity=1){if(!resolveCartItem(id)){toast("Produkten kunde inte hittas");return}let x=cart.find(i=>Number(i.id)===Number(id));if(x)x.qty+=quantity;else cart.push({id,qty:quantity});persist();renderCart();toast("Tillagd i kassen")}
-function renderCart(){if(!$("#cartItems"))return;let total=0;$("#cartItems").className="cart-list";$("#cartItems").innerHTML=cart.length?cart.map(x=>{let p=resolveCartItem(x.id);if(!p)return"";total+=p.price*x.qty;return '<div class="cart-row"><img src="'+p.img+'" alt=""><div><p>'+p.brand+'</p><h3>'+p.name+'</h3><p>'+(p.items?p.items.length+" parfymer":p.size)+' · '+money(p.price)+'</p><div class="qty"><button data-qty="'+p.id+'" data-d="-1">−</button> '+x.qty+' <button data-qty="'+p.id+'" data-d="1">+</button></div></div><div><b>'+money(p.price*x.qty)+'</b><br><button class="remove" data-remove="'+p.id+'">Ta bort</button></div></div>'}).join(""):'<p class="empty">Din kasse väntar på en ny favorit.</p>';$("#subtotal").textContent=money(total);$("#itemCount").textContent="("+cart.reduce((n,x)=>n+x.qty,0)+")";persist()}
+function renderCart(){if(!$("#cartItems"))return;let total=0;$("#cartItems").className="cart-list";$("#cartItems").innerHTML=cart.length?cart.map(x=>{let p=resolveCartItem(x.id);if(!p)return"";const off=quantityDiscount(x.qty),line=discountedLineTotal(p,x.qty);total+=line;return '<div class="cart-row"><img src="'+p.img+'" alt=""><div><p>'+p.brand+'</p><h3>'+p.name+'</h3><p>'+p.size+' · '+x.qty+' st'+(off?' · −'+off+'%':'')+'</p><div class="qty"><button data-qty="'+p.id+'" data-d="-1">−</button> '+x.qty+' <button data-qty="'+p.id+'" data-d="1">+</button></div></div><div><b>'+money(line)+'</b>'+(off?'<br><small class="cart-discount">Ord. '+money(p.price*x.qty)+'</small>':'')+'<br><button class="remove" data-remove="'+p.id+'">Ta bort</button></div></div>'}).join(""):'<p class="empty">Din kasse väntar på en ny favorit.</p>';$("#subtotal").textContent=money(total);$("#itemCount").textContent="("+cart.reduce((n,x)=>n+x.qty,0)+")";persist()}
 function openBag(){$("#shade").classList.add("open");$("#drawer").classList.add("open")}
 function closeAll(){$("#shade").classList.remove("open");$("#drawer").classList.remove("open");$("#modal").classList.remove("open")}
 function detail(id){location.href="product.html?id="+encodeURIComponent(id)}
@@ -95,7 +87,7 @@ $("#checkout").addEventListener("click",()=>toast("Kassan är inte tillgänglig 
 $("#newsletter")?.addEventListener("submit",e=>{e.preventDefault();$("#newsMessage").textContent="Tack! Du är anmäld.";e.target.reset()});
 $("#modalContent").addEventListener("click",e=>{let b=e.target.closest("[data-add]");if(b){add(+b.dataset.add);closeAll()}});
 document.querySelectorAll("#nav a").forEach(a=>a.addEventListener("click",()=>setMenu(false)));
-document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeAll();setMenu(false)}});if($("#products")){const params=new URLSearchParams(location.search);if(params.get("mood"))familyFilter=params.get("mood");render();if(params.get("view")==="wishlist"){$("#wishBtn").click()}}renderProductPage();renderBundlesPage();renderCart();
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeAll();setMenu(false)}});if($("#products")){const params=new URLSearchParams(location.search);if(params.get("mood"))familyFilter=params.get("mood");render();if(params.get("view")==="wishlist"){$("#wishBtn").click()}}renderProductPage();updateProductQuantityPrice();renderCart();
 
 (async()=>{
   try {
@@ -107,7 +99,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){closeAll();setMenu(
     const payload=await response.json();
     if(Array.isArray(payload.products)&&payload.products.length){
       products=payload.products.map(p=>({...p,cat:p.category,desc:p.description,img:p.image_url}));
-      render();renderProductPage();renderBundlesPage();
+      render();renderProductPage();updateProductQuantityPrice();
     }
   } catch(e) { console.warn("Solvind catalogue is using its local fallback.",e); }
 })();
