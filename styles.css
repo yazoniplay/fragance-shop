@@ -483,3 +483,29 @@ svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.65;strok
 @media(max-width:900px){.product-detail-layout{grid-template-columns:minmax(0,1fr) minmax(340px,.9fr);gap:24px}.product-gallery{grid-template-columns:58px minmax(0,1fr);gap:13px}.product-main-image{min-height:520px;height:60vw}.product-buy-panel{padding:20px}}
 @media(max-width:700px){.product-detail-main{padding:22px 5% 65px}.product-breadcrumb{margin:6px 0 20px;font-size:11px}.product-detail-layout{display:flex;flex-direction:column;gap:25px}.product-gallery{position:static;width:100%;display:flex;flex-direction:column-reverse;gap:12px}.product-main-image{width:100%;height:100vw;min-height:330px;max-height:520px}.product-thumbnails{flex-direction:row}.product-thumb{width:62px}.product-buy-panel{width:100%;padding:19px 17px;border-radius:13px}.product-buy-panel h1{font-size:36px}.product-description{font-size:14px}.product-meta-line{grid-template-columns:95px 1fr;font-size:12px}.product-benefits{gap:5px}.product-benefits strong{font-size:10px}.product-benefits small{font-size:9px}}
 @media(prefers-reduced-motion:reduce){.product-main-image img,.product-add-button,.product-details summary span{transition:none}}
+
+/* SOLVIND presentset */
+.bundles-main{max-width:1500px;margin:0 auto;padding:68px 6% 110px}
+.bundles-intro{max-width:680px;margin:0 auto 55px;text-align:center}
+.bundles-intro .eyebrow{color:var(--accent);letter-spacing:1.7px;font-size:10px}
+.bundles-intro h1{font-size:clamp(42px,6vw,76px);font-weight:500;letter-spacing:-.06em;line-height:1.02;margin:16px 0}
+.bundles-intro h1 em{font-style:normal;color:var(--accent)}
+.bundles-intro>p:last-child{font-size:14px;color:var(--muted);line-height:1.7}
+.bundles-grid{display:grid;grid-template-columns:1fr;gap:26px;max-width:1120px;margin:auto}
+.bundle-card{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);background:var(--surface);min-height:390px}
+.bundle-images{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);min-height:390px;overflow:hidden}
+.bundle-images img{width:100%;height:100%;min-height:390px;object-fit:cover;background:var(--bg);mix-blend-mode:multiply}
+:root[data-theme="dark"] .bundle-images img{mix-blend-mode:normal}
+.bundle-save{position:absolute;top:18px;left:18px;background:var(--ink);color:var(--bg);padding:9px 12px;font-size:9px;letter-spacing:1px;text-transform:uppercase}
+.bundle-copy{padding:clamp(25px,4vw,52px);display:flex;flex-direction:column;align-items:flex-start;justify-content:center}
+.bundle-copy .eyebrow{font-size:9px;letter-spacing:1.5px;color:var(--accent);margin:0 0 13px}
+.bundle-copy h2{font-size:clamp(28px,3.4vw,43px);letter-spacing:-.045em;font-weight:500;margin:0 0 7px}
+.bundle-subtitle{font-size:14px;color:var(--ink);margin:0 0 13px}
+.bundle-description{font-size:13px;line-height:1.7;color:var(--muted);max-width:410px;margin:0 0 20px}
+.bundle-includes{display:flex;flex-direction:column;gap:8px;width:100%;border-top:1px solid var(--line);padding:15px 0;margin-bottom:14px}
+.bundle-includes a{font-size:11px;color:var(--muted);text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.bundle-price{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.bundle-price strong{font-size:21px;color:var(--accent)}
+.bundle-price del{font-size:12px;color:var(--muted)}
+.bundle-add{width:100%;justify-content:center;min-height:52px}
+@media(max-width:700px){.bundles-main{padding:42px 5% 70px}.bundles-intro{margin-bottom:34px}.bundle-card{grid-template-columns:1fr}.bundle-images{min-height:250px;height:62vw;max-height:340px}.bundle-images img{min-height:250px}.bundle-copy{padding:25px 21px 27px}.bundle-copy h2{font-size:30px}}
